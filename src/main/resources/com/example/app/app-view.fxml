@@ -23,5 +23,6 @@
 
     <Label fx:id="l_Selection"/>
     <Button text="selectionner" onAction="#ButtonClick"/>
-    <Button text="sépia" onAction="#PasseEnSepia" />
+    <Button text="sépia" onAction="#F_sepia" />
+    <Button text="rotate" onAction="#Rotate" />
 </VBox>
