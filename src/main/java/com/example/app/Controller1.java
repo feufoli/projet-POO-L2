@@ -12,7 +12,9 @@ import java.io.File;
 public class Controller1 {
 
     Sepia sepia = new Sepia() ;
-
+    Miror miror = new Miror() ;
+    BlackWhite blackWhite = new BlackWhite() ;
+    Composant composant = new Composant() ;
 
     @FXML
     private Label l_Selection;
@@ -23,7 +25,21 @@ public class Controller1 {
     @FXML
     protected void F_sepia(ActionEvent event) {
         sepia.ReadIt(image1) ;
+    }
 
+    @FXML
+    protected void F_blackWhite(ActionEvent event) {
+        blackWhite.ReadIt(image1) ;
+    }
+
+    @FXML
+    protected void F_miror(ActionEvent event) {
+        miror.ReadIt(image1) ;
+    }
+
+    @FXML
+    protected void F_composant(ActionEvent event) {
+        composant.ReadIt(image1) ;
     }
 
     @FXML

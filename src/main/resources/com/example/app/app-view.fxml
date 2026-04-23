@@ -1,28 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.ImageView?>
-
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.BorderPane?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.app.Controller1">
+<BorderPane prefHeight="500.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.example.app.Controller1">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
+    <center>
+        <ImageView fx:id="image1" fitWidth="300" preserveRatio="true">
+            <image>
+                <Image url="@IMG_20250723_135302.jpg" />
+            </image>
+        </ImageView>
+    </center>
 
-    <ImageView fx:id="image1" fitWidth="300" preserveRatio="true">
-        <image>
-            <Image url="@IMG_20250723_135302.jpg"/>
-        </image>
-    </ImageView>
+    <left>
+        <Label fx:id="l_Selection" />
+    </left>
 
-
-    <Label fx:id="l_Selection"/>
-    <Button text="selectionner" onAction="#ButtonClick"/>
-    <Button text="sépia" onAction="#F_sepia" />
-    <Button text="rotate" onAction="#Rotate" />
-</VBox>
+    <right>
+        <VBox spacing="25">
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+            <Button onAction="#ButtonClick" text="selectionner" />
+            <Button onAction="#F_sepia" text="sépia" />
+            <Button onAction="#Rotate" text="rotate" />
+            <Button onAction="#F_miror" text="miror" />
+            <Button onAction="#F_composant" text="composant" />
+            <Button onAction="#F_blackWhite" text="Black and White" />
+        </VBox>
+    </right>
+</BorderPane>
