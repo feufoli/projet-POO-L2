@@ -26,4 +26,11 @@ public class SavedImage {
     public String getNom() {return nom ;}
 
     public void setNom(String nom) {this.nom = nom ; }
+
+    public boolean hasTag(String T){
+        for (int i = 0 ; i < tags.size() ; i++){
+            if (tags.get(i).equals(T)){ return true ; }
+        }
+        return false ;
+    }
 }

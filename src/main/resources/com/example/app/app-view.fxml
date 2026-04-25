@@ -27,6 +27,7 @@
             <Button onAction="#Selection" text="selectionner" />
             <Button onAction="#SaveIT" text="save" />
             <Button onAction="#ResetFilters" text="reset filters" />
+            <Button onAction="#ResetTags" text="reset tags" />
         </VBox>
     </left>
 

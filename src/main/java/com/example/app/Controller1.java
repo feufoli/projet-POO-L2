@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Controller1 {
 
@@ -23,6 +24,9 @@ public class Controller1 {
     protected String nom = "@IMG_20250723_135302.jpg" ;
     protected ArrayList<String> tags  = new ArrayList<String>() ;
     protected ArrayList<String> filters = new ArrayList<String>() ;
+
+    FileChooser FC = new FileChooser();
+    ArrayList<String> currentTags = new ArrayList<String>() ;
 
 
     @FXML
@@ -66,46 +70,52 @@ public class Controller1 {
         tags = new ArrayList<String>() ;
     }
 
+
+
     @FXML
     protected void Selection(ActionEvent event) {
+        if (currentTags.isEmpty()) {
+            FC.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg"));
+        }
 
-        FileChooser FC = new FileChooser() ;
-        File selectedFile =  FC.showOpenDialog(null) ;
 
+        File selectedFile = FC.showOpenDialog(null);
         if (selectedFile != null ) {
             nom = selectedFile.toURI().toString() ;
-            Image NewImage = new Image(nom) ;
-            int index = S.findImage(nom) ;
-            image1.setImage(NewImage);
-
-            if (index == -1){
-                tags = new ArrayList<String>() ;
-                filters = new ArrayList<String>() ;
-            }
-            else {
-                ArrayList<String> list = S.getSave().get(index).getFilters() ;
-                tags = S.getSave().get(index).getTags() ;
-
-                for (String s : list) {
-                    switch (s) {
-                        case "Sepia":
-                            sepia.ReadIt(image1, filters);
-                        case "Miror":
-                            miror.ReadIt(image1, filters);
-                        case "Composant":
-                            composant.ReadIt(image1, filters);
-                        case "BlackWhite":
-                            blackWhite.ReadIt(image1, filters);
-                    }
-                }
-            }
             l_Selection.setText("fichier selectionné");
-
-            ObjectMapper mapper = new ObjectMapper() ;
-
+            loadImage();
         } else {
             l_Selection.setText("pas de fichier selectionné");
         }
+        FC.getExtensionFilters().clear();
+    }
+     protected void loadImage(){
+        Image NewImage = new Image(nom) ;
+        int index = S.findImage(nom) ;
+        image1.setImage(NewImage);
+
+        if (index == -1){
+            tags = new ArrayList<String>() ;
+            filters = new ArrayList<String>() ;
+        }
+        else {
+            ArrayList<String> list = S.getSave().get(index).getFilters() ;
+            tags = S.getSave().get(index).getTags() ;
+            filters = new ArrayList<String>() ;
+
+            for (String s : list) {
+                switch (s) {
+                    case "Sepia":
+                        sepia.ReadIt(image1, filters);
+                    case "Miror":
+                        miror.ReadIt(image1, filters);
+                    case "Composant":
+                        composant.ReadIt(image1, filters);
+                    case "BlackWhite":
+                        blackWhite.ReadIt(image1, filters);
+                    }
+                }
+            }
     }
 
 
