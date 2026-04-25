@@ -3,7 +3,12 @@ package com.example.app;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+
 public class Filtre {
+
+    protected String nom ;
+
 
     public static WritableImage CopieConversion(Image NewImage, int width, int height){
         WritableImage output = new WritableImage(width, height) ;
@@ -11,7 +16,8 @@ public class Filtre {
         return output ;
     }
 
-    public void ReadIt(ImageView view){
+    public void ReadIt(ImageView view, ArrayList<String> filter){
+        filter.add(nom) ;
         Image img = view.getImage() ;
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;

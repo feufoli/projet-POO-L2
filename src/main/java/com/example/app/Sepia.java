@@ -8,6 +8,10 @@ import javafx.scene.paint.Color;
 
 public class Sepia extends Filtre{
 
+    public Sepia(){
+        nom = "Sepia" ;
+    }
+
 
     protected void Apply(PixelWriter PW, Color col, int x, int y, int width, int height){
         double red = col.getRed();

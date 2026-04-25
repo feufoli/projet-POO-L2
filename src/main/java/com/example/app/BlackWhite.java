@@ -5,6 +5,10 @@ import javafx.scene.paint.Color;
 
 public class BlackWhite extends Filtre {
 
+    public BlackWhite(){
+        nom = "BlackWhite" ;
+    }
+
 
     protected void Apply(PixelWriter PW, Color col, int x, int y, int width, int height){
         double red = col.getRed();

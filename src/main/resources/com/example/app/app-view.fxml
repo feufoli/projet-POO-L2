@@ -22,15 +22,19 @@
     </center>
 
     <left>
-        <Label fx:id="l_Selection" />
+        <VBox spacing="25" style="-fx-background-color: #EDE8D0;" >
+            <Label fx:id="l_Selection" />
+            <Button onAction="#Selection" text="selectionner" />
+            <Button onAction="#SaveIT" text="save" />
+            <Button onAction="#ResetFilters" text="reset filters" />
+        </VBox>
     </left>
 
     <right>
-        <VBox spacing="25">
+        <VBox spacing="25" style="-fx-background-color: #EDE8D0;">
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
-            <Button onAction="#ButtonClick" text="selectionner" />
             <Button onAction="#F_sepia" text="sépia" />
             <Button onAction="#Rotate" text="rotate" />
             <Button onAction="#F_miror" text="miror" />
