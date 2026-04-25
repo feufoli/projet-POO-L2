@@ -1,11 +1,7 @@
 liste de chose a faire :
 
--sélectionner les fichiers
+-filtre de detection de coins
 
--ajouter des filtres
+-systeme de tags
 
--sauvegarder en Json
-
--bibliotheque associé
-
--cryptage et décryptage
+-cryptage
