@@ -16,13 +16,17 @@
     <center>
         <ImageView fx:id="image1" fitWidth="300" preserveRatio="true">
             <image>
-                <Image url="@IMG_20250723_135302.jpg" />
+                <Image url="@welcome.png" />
             </image>
         </ImageView>
     </center>
 
     <left>
-        <VBox spacing="25" style="-fx-background-color: #EDE8D0;" >
+        <VBox prefWidth="150.0" spacing="25" style="-fx-background-color: #EDE8D0; -fx-border-color: #0000F0; -fx-border-width: 2;" >
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+
             <Label fx:id="l_Selection" />
             <Button onAction="#Selection" text="selectionner" />
             <Button onAction="#SaveIT" text="save" />
@@ -35,7 +39,7 @@
     </left>
 
     <right>
-        <VBox spacing="25" style="-fx-background-color: #EDE8D0;">
+        <VBox prefWidth="150.0" spacing="25" style="-fx-background-color: #EDE8D0; -fx-border-color: #0000F0; -fx-border-width: 2;" >
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>

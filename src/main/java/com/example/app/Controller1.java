@@ -8,12 +8,16 @@ import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Controller1 {
 
@@ -24,18 +28,22 @@ public class Controller1 {
     Filtre filtre = new Filtre() ;
 
     Saver S = new Saver() ;
-
-    protected String nom = "@IMG_20250723_135302.jpg" ;
-    protected ArrayList<String> tags  = new ArrayList<String>() ;
-    protected ArrayList<String> filters = new ArrayList<String>() ;
-
-    FileChooser FC = new FileChooser();
-    ArrayList<String> currentTags = new ArrayList<String>() ;
-
     Securite Sec = new Securite("mot de passe") ;
     byte[] mdp = Sec.getMdp_int() ;
 
+    protected String nom = "@welcome.jpg" ;
+    protected ArrayList<String> tags  = new ArrayList<String>() ;
+    protected ArrayList<String> filters = new ArrayList<String>() ;
+
+
+    FileChooser FC = new FileChooser();
+    FileChooser saveChooser = new FileChooser();
+    ArrayList<String> currentTags = new ArrayList<String>() ;
+
+    File selectedFile ;
     File src = new File(System.getProperty("user.dir"), "data") ;
+
+
 
     @FXML
     protected void SaveIT(){
@@ -47,6 +55,10 @@ public class Controller1 {
 
     @FXML
     protected ImageView image1 ;
+
+    Image imageBase  ;
+
+
 
     @FXML
     protected void F_sepia(ActionEvent event) { image1.setImage( sepia.ReadIt(image1, filters) );}
@@ -67,6 +79,27 @@ public class Controller1 {
     }
 
     @FXML
+    public void Rotate(ActionEvent event){
+        Image NewImage = image1.getImage() ;
+        PixelReader PR = NewImage.getPixelReader();
+        int width = (int) NewImage.getWidth() ;
+        int height = (int) NewImage.getHeight() ;
+
+        WritableImage output = new WritableImage(height, width) ;
+        PixelWriter PW =  output.getPixelWriter() ;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color col = PR.getColor(x, y);
+                PW.setColor(height-1- y, x, col );
+            }
+        }
+        image1.setImage( output );
+    }
+
+
+
+    @FXML
     protected void ResetFilters(ActionEvent event){
         filters = new ArrayList<String>() ;
         Image NewImage = new Image(nom) ;
@@ -77,6 +110,8 @@ public class Controller1 {
     protected void ResetTags(ActionEvent event){
         tags = new ArrayList<String>() ;
     }
+
+
 
     public int[] shuffle_list(int n){
 
@@ -105,13 +140,12 @@ public class Controller1 {
 
     @FXML
     protected void shuffle(){
-        Image img = image1.getImage() ;
+        Image img = imageBase ;
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;
         int height = (int) img.getHeight() ;
 
-        WritableImage output = filtre.CopieConversion(img, width, height) ;
-        PixelWriter PW =  output.getPixelWriter() ;
+        BufferedImage buf = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB) ;
 
         int[] ordre = shuffle_list(width * height) ;
         int n ;
@@ -124,10 +158,17 @@ public class Controller1 {
                 h = n/ width ;
                 w = n % width ;
 
-                PW.setColor(x, y, PR.getColor(w, h) );
+                buf.setRGB(x, y, PR.getArgb(w, h) );
             }
         }
-        image1.setImage(output);
+        if (selectedFile != null) {
+            try {
+                ImageIO.write(buf, "png", selectedFile) ;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     @FXML
@@ -159,15 +200,13 @@ public class Controller1 {
 
     @FXML
     protected void Selection(ActionEvent event) {
-        if (currentTags.isEmpty()) {
 
-            FC.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg"));
-            FC.setInitialDirectory(src) ;
-        }
-
+        FC.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg"));
+        FC.setInitialDirectory(src) ;
 
         File selectedFile = FC.showOpenDialog(null);
         if (selectedFile != null ) {
+            this.selectedFile =selectedFile ;
             nom = selectedFile.toURI().toString() ;
             l_Selection.setText("fichier selectionné");
             loadImage();
@@ -179,6 +218,7 @@ public class Controller1 {
 
     protected void loadImage(){
         Image NewImage = new Image(nom) ;
+        imageBase = NewImage ;
         int index = S.findImage(nom) ;
         image1.setImage(NewImage);
 
@@ -206,24 +246,8 @@ public class Controller1 {
             }
     }
 
-    @FXML
-    public void Rotate(ActionEvent event){
-        Image NewImage = image1.getImage() ;
-        PixelReader PR = NewImage.getPixelReader();
-        int width = (int) NewImage.getWidth() ;
-        int height = (int) NewImage.getHeight() ;
 
-        WritableImage output = new WritableImage(height, width) ;
-        PixelWriter PW =  output.getPixelWriter() ;
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color col = PR.getColor(x, y);
-                PW.setColor(height-1- y, x, col );
-            }
-        }
-        image1.setImage( output );
-    }
 
 
 
