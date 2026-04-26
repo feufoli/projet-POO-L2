@@ -28,6 +28,9 @@
             <Button onAction="#SaveIT" text="save" />
             <Button onAction="#ResetFilters" text="reset filters" />
             <Button onAction="#ResetTags" text="reset tags" />
+
+            <Button onAction="#shuffle" text="melange" />
+            <Button onAction="#unShuffle" text="retablir" />
         </VBox>
     </left>
 

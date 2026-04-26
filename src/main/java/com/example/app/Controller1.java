@@ -9,8 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Controller1 {
 
@@ -28,6 +30,8 @@ public class Controller1 {
     FileChooser FC = new FileChooser();
     ArrayList<String> currentTags = new ArrayList<String>() ;
 
+    Securite Sec = new Securite("mot de passe") ;
+    byte[] mdp = Sec.getMdp_int() ;
 
     @FXML
     protected void SaveIT(){
@@ -70,7 +74,62 @@ public class Controller1 {
         tags = new ArrayList<String>() ;
     }
 
+    @FXML
+    protected void shuffle(){
+        Image img = image1.getImage() ;
+        PixelReader PR = img.getPixelReader();
+        int width = (int) img.getWidth() ;
+        int height = (int) img.getHeight() ;
+        WritableImage output = sepia.CopieConversion(img, width, height) ;
+        PixelWriter PW =  output.getPixelWriter() ;
 
+        SecureRandom R = new SecureRandom(mdp) ;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int col = PR.getArgb(x, y);
+                int r = R.nextInt(256) ;
+
+                int red = (( (col >> 16) & 0xFF )+ r) %256;
+                int green = (( (col >> 8)& 0xFF )+r ) %256;
+                int blue = (( (col      )& 0xFF )+r ) %256;
+                int alpha = ( (col >> 24)& 0xFF ) ;
+
+                int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;
+                PW.setArgb(x, y, argb );
+
+            }
+        }
+        image1.setImage(output);
+    }
+
+    @FXML
+    protected void unShuffle(){
+        Image img = image1.getImage() ;
+        PixelReader PR = img.getPixelReader();
+        int width = (int) img.getWidth() ;
+        int height = (int) img.getHeight() ;
+        WritableImage output = sepia.CopieConversion(img, width, height) ;
+        PixelWriter PW =  output.getPixelWriter() ;
+
+        SecureRandom R = new SecureRandom(mdp) ;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int col = PR.getArgb(x, y);
+                int r = R.nextInt(256) ;
+
+                int red = (( (col >> 16) & 0xFF )- r + 256) %256;
+                int green = (( (col >> 8)& 0xFF )-r +256 ) %256;
+                int blue = (( (col )& 0xFF )-r +256 ) %256;
+                int alpha = ( (col >> 24)& 0xFF ) ;
+
+                int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;
+                PW.setArgb(x, y, argb );
+            }
+        }
+        image1.setImage(output);
+    }
 
     @FXML
     protected void Selection(ActionEvent event) {
