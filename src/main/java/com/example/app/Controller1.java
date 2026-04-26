@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class Controller1 {
     Miror miror = new Miror() ;
     BlackWhite blackWhite = new BlackWhite() ;
     Composant composant = new Composant() ;
+    Filtre filtre = new Filtre() ;
 
     Saver S = new Saver() ;
 
@@ -33,6 +35,8 @@ public class Controller1 {
     Securite Sec = new Securite("mot de passe") ;
     byte[] mdp = Sec.getMdp_int() ;
 
+    File src = new File(System.getProperty("user.dir"), "data") ;
+
     @FXML
     protected void SaveIT(){
         S.saveIt(nom, tags, filters);
@@ -45,21 +49,21 @@ public class Controller1 {
     protected ImageView image1 ;
 
     @FXML
-    protected void F_sepia(ActionEvent event) { sepia.ReadIt(image1, filters) ;}
+    protected void F_sepia(ActionEvent event) { image1.setImage( sepia.ReadIt(image1, filters) );}
 
     @FXML
     protected void F_blackWhite(ActionEvent event) {
-        blackWhite.ReadIt(image1, filters) ;
+        image1.setImage(blackWhite.ReadIt(image1, filters) );
     }
 
     @FXML
     protected void F_miror(ActionEvent event) {
-        miror.ReadIt(image1, filters) ;
+        image1.setImage( miror.ReadIt(image1, filters) );
     }
 
     @FXML
     protected void F_composant(ActionEvent event) {
-        composant.ReadIt(image1, filters) ;
+        image1.setImage( composant.ReadIt(image1, filters) ) ;
     }
 
     @FXML
@@ -74,30 +78,53 @@ public class Controller1 {
         tags = new ArrayList<String>() ;
     }
 
+    public int[] shuffle_list(int n){
+
+        int[] ordre = new int[n] ;
+        for (int i = 0; i < n; i++) {
+            ordre[i] = i;
+        }
+
+        SecureRandom R = null;
+        try {
+            R = SecureRandom.getInstance("SHA1PRNG");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        R.setSeed(mdp);
+
+        for (int i = 0 ; i < n ; i++){
+            int j = R.nextInt(n) ;
+
+            int temp = ordre[j] ;
+            ordre[j] = ordre[i] ;
+            ordre[i] = temp ;
+        }
+        return ordre ;
+    }
+
     @FXML
     protected void shuffle(){
         Image img = image1.getImage() ;
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;
         int height = (int) img.getHeight() ;
-        WritableImage output = sepia.CopieConversion(img, width, height) ;
+
+        WritableImage output = filtre.CopieConversion(img, width, height) ;
         PixelWriter PW =  output.getPixelWriter() ;
 
-        SecureRandom R = new SecureRandom(mdp) ;
+        int[] ordre = shuffle_list(width * height) ;
+        int n ;
+        int w ;
+        int h ;
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int col = PR.getArgb(x, y);
-                int r = R.nextInt(256) ;
+        for (int y = 0 ; y < height ; y++){
+            for (int x = 0 ; x < width ; x++){
+                n = ordre[y * width +x] ;
+                h = n/ width ;
+                w = n % width ;
 
-                int red = (( (col >> 16) & 0xFF )+ r) %256;
-                int green = (( (col >> 8)& 0xFF )+r ) %256;
-                int blue = (( (col      )& 0xFF )+r ) %256;
-                int alpha = ( (col >> 24)& 0xFF ) ;
-
-                int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;
-                PW.setArgb(x, y, argb );
-
+                PW.setColor(x, y, PR.getColor(w, h) );
             }
         }
         image1.setImage(output);
@@ -109,23 +136,22 @@ public class Controller1 {
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;
         int height = (int) img.getHeight() ;
-        WritableImage output = sepia.CopieConversion(img, width, height) ;
+
+        WritableImage output = filtre.CopieConversion(img, width, height) ;
         PixelWriter PW =  output.getPixelWriter() ;
 
-        SecureRandom R = new SecureRandom(mdp) ;
+        int[] ordre = shuffle_list(width * height) ;
+        int n ;
+        int w ;
+        int h ;
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int col = PR.getArgb(x, y);
-                int r = R.nextInt(256) ;
+        for (int y = 0 ; y < height ; y++){
+            for (int x = 0 ; x < width ; x++){
+                n = ordre[y * width +x] ;
+                h = n/ width ;
+                w = n % width ;
 
-                int red = (( (col >> 16) & 0xFF )- r + 256) %256;
-                int green = (( (col >> 8)& 0xFF )-r +256 ) %256;
-                int blue = (( (col )& 0xFF )-r +256 ) %256;
-                int alpha = ( (col >> 24)& 0xFF ) ;
-
-                int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;
-                PW.setArgb(x, y, argb );
+                PW.setColor(w, h, PR.getColor(x, y) );
             }
         }
         image1.setImage(output);
@@ -134,7 +160,9 @@ public class Controller1 {
     @FXML
     protected void Selection(ActionEvent event) {
         if (currentTags.isEmpty()) {
+
             FC.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg"));
+            FC.setInitialDirectory(src) ;
         }
 
 
@@ -148,7 +176,8 @@ public class Controller1 {
         }
         FC.getExtensionFilters().clear();
     }
-     protected void loadImage(){
+
+    protected void loadImage(){
         Image NewImage = new Image(nom) ;
         int index = S.findImage(nom) ;
         image1.setImage(NewImage);
@@ -176,7 +205,6 @@ public class Controller1 {
                 }
             }
     }
-
 
     @FXML
     public void Rotate(ActionEvent event){

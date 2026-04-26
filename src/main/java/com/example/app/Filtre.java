@@ -7,8 +7,7 @@ import java.util.ArrayList;
 
 public class Filtre {
 
-    protected String nom ;
-
+    protected String nom = "Filtre";
 
     public static WritableImage CopieConversion(Image NewImage, int width, int height){
         WritableImage output = new WritableImage(width, height) ;
@@ -16,7 +15,7 @@ public class Filtre {
         return output ;
     }
 
-    public void ReadIt(ImageView view, ArrayList<String> filter){
+    public WritableImage ReadIt(ImageView view, ArrayList<String> filter){
         filter.add(nom) ;
         Image img = view.getImage() ;
         PixelReader PR = img.getPixelReader();
@@ -31,12 +30,12 @@ public class Filtre {
                 Apply(PW, col, x, y, width, height);
             }
         }
-        view.setImage(output); ;
+        return output;
 
     }
 
     protected void Apply(PixelWriter PW, Color col, int x, int y, int width, int height){
-
+        PW.setColor(x,y,col);
     }
 
 
