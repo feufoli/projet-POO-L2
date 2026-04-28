@@ -41,7 +41,7 @@ public class Controller1 {
     ArrayList<String> currentTags = new ArrayList<String>() ;
 
     File selectedFile ;
-    File src = new File(System.getProperty("user.dir"), "data") ;
+    File src = new File(System.getProperty("user.dir"), "projet-POO-L2/data") ;
 
 
 
