@@ -31,7 +31,7 @@ public class Controller1 {
     Securite Sec = new Securite("mot de passe") ;
     byte[] mdp = Sec.getMdp_int() ;
 
-    protected String nom = "@welcome.jpg" ;
+
     protected ArrayList<String> tags  = new ArrayList<String>() ;
     protected ArrayList<String> filters = new ArrayList<String>() ;
 
@@ -42,8 +42,8 @@ public class Controller1 {
 
     File selectedFile ;
     File src = new File(System.getProperty("user.dir"), "data") ;
-
-
+    protected String nom = (new File(src, "welcome.png")).toURI().toString()  ;
+    Image imageBase  = new Image(nom);
 
     @FXML
     protected void SaveIT(){
@@ -55,10 +55,6 @@ public class Controller1 {
 
     @FXML
     protected ImageView image1 ;
-
-    Image imageBase  ;
-
-
 
     @FXML
     protected void F_sepia(ActionEvent event) { image1.setImage( sepia.ReadIt(image1, filters) );}
@@ -80,6 +76,7 @@ public class Controller1 {
 
     @FXML
     public void Rotate(ActionEvent event){
+        System.out.println(nom);
         Image NewImage = image1.getImage() ;
         PixelReader PR = NewImage.getPixelReader();
         int width = (int) NewImage.getWidth() ;
@@ -102,8 +99,11 @@ public class Controller1 {
     @FXML
     protected void ResetFilters(ActionEvent event){
         filters = new ArrayList<String>() ;
+
         Image NewImage = new Image(nom) ;
+
         image1.setImage(NewImage);
+
     }
 
     @FXML
@@ -173,13 +173,12 @@ public class Controller1 {
 
     @FXML
     protected void unShuffle(){
-        Image img = image1.getImage() ;
+        Image img = imageBase ;
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;
         int height = (int) img.getHeight() ;
 
-        WritableImage output = filtre.CopieConversion(img, width, height) ;
-        PixelWriter PW =  output.getPixelWriter() ;
+        BufferedImage buf = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB) ;
 
         int[] ordre = shuffle_list(width * height) ;
         int n ;
@@ -192,10 +191,16 @@ public class Controller1 {
                 h = n/ width ;
                 w = n % width ;
 
-                PW.setColor(w, h, PR.getColor(x, y) );
+                buf.setRGB(w, h, PR.getArgb(x, y) );
             }
         }
-        image1.setImage(output);
+        if (selectedFile != null) {
+            try {
+                ImageIO.write(buf, "png", selectedFile) ;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @FXML
@@ -245,10 +250,5 @@ public class Controller1 {
                 }
             }
     }
-
-
-
-
-
 
 }
