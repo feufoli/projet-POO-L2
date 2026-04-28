@@ -225,6 +225,7 @@ public class Controller1 {
     @FXML
     protected void Selection(ActionEvent event) {
 
+
         FC.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.png", "*.jpg"));
         FC.setInitialDirectory(src) ;
 
@@ -255,18 +256,22 @@ public class Controller1 {
             filters = new ArrayList<String>() ;
 
             for (String s : list) {
+
                 switch (s) {
                     case "Sepia":
-                        sepia.ReadIt(image1, filters);
+                        image1.setImage(sepia.ReadIt(image1, filters));
                         break;
                     case "Miror":
-                        miror.ReadIt(image1, filters);
+                        image1.setImage(miror.ReadIt(image1, filters));
                         break;
                     case "Composant":
-                        composant.ReadIt(image1, filters);
+                        image1.setImage(composant.ReadIt(image1, filters));
                         break;
                     case "BlackWhite":
-                        blackWhite.ReadIt(image1, filters);
+                        image1.setImage(blackWhite.ReadIt(image1, filters));
+                        break;
+                    case "Prewitt":
+                        image1.setImage(prewitt.ReadIt(image1, filters));
                         break;
                     }
 
