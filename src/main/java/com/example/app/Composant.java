@@ -1,5 +1,6 @@
 package com.example.app;
 
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;
 
@@ -9,7 +10,7 @@ public class Composant extends Filtre{
         nom = "Composant" ;
     }
 
-    protected void Apply(PixelWriter PW, Color col, int x, int y, int width, int height){
+    protected void Apply(PixelReader PR, PixelWriter PW, Color col, int x, int y, int width, int height){
         double red = col.getRed();
         double green = col.getGreen();
         double blue = col.getBlue();

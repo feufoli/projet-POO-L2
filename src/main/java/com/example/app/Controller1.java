@@ -5,11 +5,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.scene.control.TextField;
 
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +28,12 @@ public class Controller1 {
     Miror miror = new Miror() ;
     BlackWhite blackWhite = new BlackWhite() ;
     Composant composant = new Composant() ;
+    Prewitt prewitt = new Prewitt() ;
     Filtre filtre = new Filtre() ;
+
+    @FXML
+    protected TextField PassWordField ;
+
 
     Saver S = new Saver() ;
     Securite Sec = new Securite("mot de passe") ;
@@ -43,7 +51,7 @@ public class Controller1 {
     File selectedFile ;
     File src = new File(System.getProperty("user.dir"), "data") ;
     protected String nom = (new File(src, "welcome.png")).toURI().toString()  ;
-    Image imageBase  = new Image(nom);
+
 
     @FXML
     protected void SaveIT(){
@@ -75,8 +83,12 @@ public class Controller1 {
     }
 
     @FXML
+    protected void F_prewitt(ActionEvent event) {
+        image1.setImage(prewitt.ReadIt(image1, filters) );
+    }
+
+    @FXML
     public void Rotate(ActionEvent event){
-        System.out.println(nom);
         Image NewImage = image1.getImage() ;
         PixelReader PR = NewImage.getPixelReader();
         int width = (int) NewImage.getWidth() ;
@@ -126,6 +138,8 @@ public class Controller1 {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+        Sec = new Securite(PassWordField.getText()) ;
+        mdp = Sec.getMdp_int() ;
         R.setSeed(mdp);
 
         for (int i = 0 ; i < n ; i++){
@@ -140,7 +154,7 @@ public class Controller1 {
 
     @FXML
     protected void shuffle(){
-        Image img = imageBase ;
+        Image img = new Image(nom) ;
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;
         int height = (int) img.getHeight() ;
@@ -173,7 +187,7 @@ public class Controller1 {
 
     @FXML
     protected void unShuffle(){
-        Image img = imageBase ;
+        Image img = new Image(nom) ;
         PixelReader PR = img.getPixelReader();
         int width = (int) img.getWidth() ;
         int height = (int) img.getHeight() ;
@@ -223,7 +237,6 @@ public class Controller1 {
 
     protected void loadImage(){
         Image NewImage = new Image(nom) ;
-        imageBase = NewImage ;
         int index = S.findImage(nom) ;
         image1.setImage(NewImage);
 

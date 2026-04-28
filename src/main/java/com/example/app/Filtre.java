@@ -27,14 +27,14 @@ public class Filtre {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Color col = PR.getColor(x, y);
-                Apply(PW, col, x, y, width, height);
+                Apply(PR, PW, col, x, y, width, height);
             }
         }
         return output;
 
     }
 
-    protected void Apply(PixelWriter PW, Color col, int x, int y, int width, int height){
+    protected void Apply(PixelReader PR, PixelWriter PW, Color col, int x, int y, int width, int height){
         PW.setColor(x,y,col);
     }
 
