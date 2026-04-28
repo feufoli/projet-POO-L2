@@ -235,12 +235,16 @@ public class Controller1 {
                 switch (s) {
                     case "Sepia":
                         sepia.ReadIt(image1, filters);
+                        break;
                     case "Miror":
                         miror.ReadIt(image1, filters);
+                        break;
                     case "Composant":
                         composant.ReadIt(image1, filters);
+                        break;
                     case "BlackWhite":
                         blackWhite.ReadIt(image1, filters);
+                        break;
                     }
                 }
             }
