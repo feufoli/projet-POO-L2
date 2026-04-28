@@ -48,7 +48,7 @@ public class Saver {
         }
         else {
             getSave().get(index).setTags(tags) ;
-            getSave().get(index).setFilters(filters); ;
+            getSave().get(index).setFilters(filters);
         }
         saveAll() ;
     }
