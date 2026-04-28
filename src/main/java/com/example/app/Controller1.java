@@ -34,6 +34,9 @@ public class Controller1 {
     @FXML
     protected TextField PassWordField ;
 
+    @FXML
+    protected TextField TagField ;
+
 
     Saver S = new Saver() ;
     Securite Sec = new Securite("mot de passe") ;
@@ -123,6 +126,8 @@ public class Controller1 {
         tags = new ArrayList<String>() ;
     }
 
+    @FXML
+    protected void AddTag(ActionEvent event){tags.add(TagField.getText()) ; }
 
 
     public int[] shuffle_list(int n){

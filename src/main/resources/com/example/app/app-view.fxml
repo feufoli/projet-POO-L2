@@ -35,7 +35,11 @@
             <Button onAction="#Selection" text="selectionner" />
             <Button onAction="#SaveIT" text="save" />
             <Button onAction="#ResetFilters" text="reset filters" />
+            <TextField fx:id="TagField">
+                <text>Tag</text>
+            </TextField>
             <Button onAction="#ResetTags" text="reset tags" />
+            <Button onAction="#AddTag" text="ajouter tag" />
 
             <TextField fx:id="PassWordField">
                 <text>mot de passe</text>
@@ -50,8 +54,8 @@
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
-            <Button onAction="#F_sepia" text="sépia" />
             <Button onAction="#Rotate" text="rotate" />
+            <Button onAction="#F_sepia" text="sépia" />
             <Button onAction="#F_miror" text="miror" />
             <Button onAction="#F_composant" text="composant" />
             <Button onAction="#F_blackWhite" text="Black and White" />
